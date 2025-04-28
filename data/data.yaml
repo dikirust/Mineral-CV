@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 2
+names: ['mechanical crack', 'natural crack']
+
+roboflow:
+  workspace: crack-detection-ybqbl
+  project: mcg-cv
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/crack-detection-ybqbl/mcg-cv/dataset/1
