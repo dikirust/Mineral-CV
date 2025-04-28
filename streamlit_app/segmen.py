@@ -41,7 +41,7 @@ if uploaded_file is not None:
     img = io.imread(uploaded_file)
     
     # Display the original image
-    st.image(img, caption="Uploaded Image", use_column_width=True)
+    st.image(img, caption="Uploaded Image", use_container_width=True)
     
     # Convert RGBA to RGB if necessary
     if img.shape[-1] == 4:  # Check if the image has 4 channels
@@ -54,7 +54,7 @@ if uploaded_file is not None:
         mask = cv2.inRange(hsv, (h_min, s_min, v_min), (h_max, s_max, v_max))
 
         # Display the raw mask (before binary closing)
-        st.image(mask, caption="Raw Mask (Before Binary Closing)", use_column_width=True, clamp=True)
+        st.image(mask, caption="Raw Mask (Before Binary Closing)", use_container_width=True, clamp=True)
 
         # Use the raw mask directly
         closed_mask_uint8 = mask
@@ -69,7 +69,7 @@ if uploaded_file is not None:
         image_label_overlay = color.label2rgb(label_image, image=img)
 
         # Display the segmented image
-        st.image(image_label_overlay, caption="Segmented Image", use_column_width=True)
+        st.image(image_label_overlay, caption="Segmented Image", use_container_width=True)
 
         # Calculate the segmented area percentage
         segmented_area_percentage = calculate_segmented_area_percentage(closed_mask_uint8)
@@ -78,4 +78,4 @@ if uploaded_file is not None:
         st.write(f"Remaining Unsegmented Area Percentage: {remaining_unsegmented_percentage:.2f}%")
 
         # Display the remaining unmasked image
-        st.image(unmasked_image, caption="Remaining Unmasked Image", use_column_width=True)
+        st.image(unmasked_image, caption="Remaining Unmasked Image", use_container_width=True)
