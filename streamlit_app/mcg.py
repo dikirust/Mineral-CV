@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from skimage import io, measure, color
 from scipy import ndimage as ndi
 from ultralytics import YOLO
+from inference_sdk import InferenceHTTPClient
 
 # Function to calculate the percentage area of the segmented region
 def calculate_segmented_area_percentage(mask):
@@ -21,6 +22,7 @@ def calculate_segmented_area_percentage(mask):
     segmented_pixels = np.count_nonzero(mask)  # Count of non-zero pixels in the mask
     percentage = (segmented_pixels / total_pixels) * 100  # Calculate percentage
     return percentage
+
 
 # Load YOLOv8 model
 model = YOLO('yolov8n.pt')  # Replace 'yolov8n.pt' with your trained model if available
