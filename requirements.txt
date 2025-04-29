@@ -5,3 +5,5 @@ matplotlib
 scikit-image
 scipy
 scikit-learn
+ultralytics
+inference_sdk
