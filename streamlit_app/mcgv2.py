@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from skimage import io, measure, color
 from scipy import ndimage as ndi
 from ultralytics import YOLO
-from inference_sdk import InferenceHTTPClient
+# from inference_sdk import InferenceHTTPClient
 
 # Function to calculate the percentage area of the segmented region
 def calculate_segmented_area_percentage(mask):
