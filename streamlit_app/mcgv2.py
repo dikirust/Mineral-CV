@@ -24,7 +24,7 @@ def calculate_segmented_area_percentage(mask):
     return percentage
 
 # Load YOLOv11 model
-model = YOLO('best.pt')  # Replace 'yolo11n.pt' with your trained YOLOv11 model
+model = YOLO('yolo11n.pt')  # Replace 'yolo11n.pt' with your trained YOLOv11 model
 
 # Streamlit app
 st.title("Image Segmentation and Area Calculation")
@@ -44,18 +44,28 @@ if uploaded_file is not None:
         img = cv2.cvtColor(img, cv2.COLOR_RGBA2RGB)
 
     # Proceed with segmentation analysis
-    st.sidebar.header("Mask HSV Range Adjustment")
-    h_min = st.sidebar.slider("Hue Min", 0, 179, 20)
-    h_max = st.sidebar.slider("Hue Max", 0, 179, 50)
-    s_min = st.sidebar.slider("Saturation Min", 0, 255, 20)
-    s_max = st.sidebar.slider("Saturation Max", 0, 255, 255)
-    v_min = st.sidebar.slider("Value Min", 0, 255, 20)
-    v_max = st.sidebar.slider("Value Max", 0, 255, 255)
+    st.sidebar.header("Material Selection")
 
-    if st.sidebar.button("Proceed with HSV Values"):
+    # Define HSV ranges for each material
+    hsv_ranges = {
+        "Nikel": (20, 50, 20, 255, 20, 255),
+        "Besi": (0, 30, 0, 50, 50, 100),  # Dummy values for grayish range
+        "Sulfur": (10, 40, 10, 60, 60, 120)  # Dummy values for grayish range
+    }
+
+    # Create buttons for material selection
+    selected_material = st.sidebar.radio(
+        "Select Material:",
+        options=["Nikel", "Besi", "Sulfur"],
+        index=0
+    )
+
+    # Process the image based on the selected material
+    if selected_material:
+        h_min, h_max, s_min, s_max, v_min, v_max = hsv_ranges[selected_material]
         hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
         mask = cv2.inRange(hsv, (h_min, s_min, v_min), (h_max, s_max, v_max))
-        st.image(mask, caption="Raw Mask (Before Binary Closing)", width=700, clamp=True)
+        st.image(mask, caption=f"Raw Mask for {selected_material} (Before Binary Closing)", width=700, clamp=True)
 
         # Use the raw mask directly
         closed_mask_uint8 = mask
@@ -70,16 +80,16 @@ if uploaded_file is not None:
         image_label_overlay = color.label2rgb(label_image, image=img)
 
         # Display the segmented image
-        st.image(image_label_overlay, caption="Segmented Image", width=700)  # Adjust width as needed
+        st.image(image_label_overlay, caption=f"Segmented Image for {selected_material}", width=700)  # Adjust width as needed
 
         # Calculate the segmented area percentage
         segmented_area_percentage = calculate_segmented_area_percentage(closed_mask_uint8)
         remaining_unsegmented_percentage = 100 - segmented_area_percentage
-        st.write(f"Segmented Area Percentage: {segmented_area_percentage:.2f}%")
+        st.write(f"Segmented Area Percentage for {selected_material}: {segmented_area_percentage:.2f}%")
         st.write(f"Remaining Unsegmented Area Percentage: {remaining_unsegmented_percentage:.2f}%")
 
         # Display the remaining unmasked image
-        st.image(unmasked_image, caption="Remaining Unmasked Image", width=700)
+        st.image(unmasked_image, caption=f"Remaining Unmasked Image for {selected_material}", width=700)
 
     # Proceed with YOLOv11 object detection
     st.header("YOLOv11 Object Detection")
