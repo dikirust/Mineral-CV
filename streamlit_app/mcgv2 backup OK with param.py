@@ -97,7 +97,16 @@ if uploaded_file is not None:
     # Add a slider for confidence level
     conf_level = st.slider("Confidence Level", min_value=0.0, max_value=1.0, value=0.10, step=0.01)
 
+    # Debug: Print model names to verify class names
+    # st.write("Model class names:", model.names)
+
+    # Debug: Print input image shape
+    st.write("Input image shape:", img.shape)
+
     results = model.predict(source=img, save=False, conf=conf_level)  # Use slider value for confidence threshold
+
+    # Debug: Print raw results from YOLO model
+    # st.write("Raw YOLO results:", results)
 
     for result in results:
         annotated_img = result.plot()  # Annotate image with bounding boxes
