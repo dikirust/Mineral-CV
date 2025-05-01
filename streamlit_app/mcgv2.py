@@ -63,33 +63,37 @@ if uploaded_file is not None:
     # Process the image based on the selected material
     if selected_material:
         h_min, h_max, s_min, s_max, v_min, v_max = hsv_ranges[selected_material]
-        hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
-        mask = cv2.inRange(hsv, (h_min, s_min, v_min), (h_max, s_max, v_max))
-        st.image(mask, caption=f"Raw Mask for {selected_material} (Before Binary Closing)", width=700, clamp=True)
 
-        # Use the raw mask directly
-        closed_mask_uint8 = mask
+        # Add a button to confirm HSV value adjustments
+        if st.sidebar.button("Proceed with HSV Values"):
+            # Convert to HSV and create a mask
+            hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+            mask = cv2.inRange(hsv, (h_min, s_min, v_min), (h_max, s_max, v_max))
+            st.image(mask, caption=f"Raw Mask for {selected_material} (Before Binary Closing)", width=700, clamp=True)
 
-        # Create the remaining unmasked image
-        unmasked_image = cv2.bitwise_and(img, img, mask=cv2.bitwise_not(closed_mask_uint8))
+            # Use the raw mask directly
+            closed_mask_uint8 = mask
 
-        # Label the segmented regions
-        label_image = closed_mask_uint8
+            # Create the remaining unmasked image
+            unmasked_image = cv2.bitwise_and(img, img, mask=cv2.bitwise_not(closed_mask_uint8))
 
-        # Generate the label overlay
-        image_label_overlay = color.label2rgb(label_image, image=img)
+            # Label the segmented regions
+            label_image = closed_mask_uint8
 
-        # Display the segmented image
-        st.image(image_label_overlay, caption=f"Segmented Image for {selected_material}", width=700)  # Adjust width as needed
+            # Generate the label overlay
+            image_label_overlay = color.label2rgb(label_image, image=img)
 
-        # Calculate the segmented area percentage
-        segmented_area_percentage = calculate_segmented_area_percentage(closed_mask_uint8)
-        remaining_unsegmented_percentage = 100 - segmented_area_percentage
-        st.write(f"Segmented Area Percentage for {selected_material}: {segmented_area_percentage:.2f}%")
-        st.write(f"Remaining Unsegmented Area Percentage: {remaining_unsegmented_percentage:.2f}%")
+            # Display the segmented image
+            st.image(image_label_overlay, caption=f"Segmented Image for {selected_material}", width=700)  # Adjust width as needed
 
-        # Display the remaining unmasked image
-        st.image(unmasked_image, caption=f"Remaining Unmasked Image for {selected_material}", width=700)
+            # Calculate the segmented area percentage
+            segmented_area_percentage = calculate_segmented_area_percentage(closed_mask_uint8)
+            remaining_unsegmented_percentage = 100 - segmented_area_percentage
+            st.write(f"Segmented Area Percentage for {selected_material}: {segmented_area_percentage:.2f}%")
+            st.write(f"Remaining Unsegmented Area Percentage: {remaining_unsegmented_percentage:.2f}%")
+
+            # Display the remaining unmasked image
+            st.image(unmasked_image, caption=f"Remaining Unmasked Image for {selected_material}", width=700)
 
     # Proceed with YOLOv11 object detection
     st.header("YOLOv11 Object Detection")
