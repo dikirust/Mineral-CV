@@ -60,6 +60,10 @@ if uploaded_file is not None:
         index=0
     )
 
+    # Define default HSV values for other materials
+    if selected_material != "Specific Color":
+        h_min, h_max, s_min, s_max, v_min, v_max = hsv_ranges[selected_material]
+
     # Add sliders for HSV range adjustment, active only for 'Specific Color'
     if selected_material == "Specific Color":
         st.sidebar.header("Mask HSV Range Adjustment")
