@@ -62,7 +62,7 @@ if uploaded_file is not None:
 
     # Update material selection options to include 'Specific Color'
     selected_material = st.sidebar.radio(
-        "Select Material:",
+        "Select Mineral:",
         options=["Nikel", "Besi", "Sulfur", "Specific Color"],
         index=0
     )
