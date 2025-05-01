@@ -32,7 +32,7 @@ st.title("🛠️ Advanced Geoscience Image Analysis for Nickel Mining")
 # Add a description with an icon
 st.markdown("""
 🌍 This application leverages advanced image segmentation and object detection techniques to analyze geoscience images for nickel mining. 
-It provides insights into material composition, segmented area percentages, and object detection results.
+It provides insights into mineral composition, segmented area percentages, and object detection results.
 """)
 
 # Consolidate image upload to a single uploader for all analyses
@@ -51,7 +51,7 @@ if uploaded_file is not None:
         img = cv2.cvtColor(img, cv2.COLOR_RGBA2RGB)
 
     # Proceed with segmentation analysis
-    st.sidebar.header("Material Selection")
+    st.sidebar.header("Mineral Selection")
 
     # Define HSV ranges for each material
     hsv_ranges = {
