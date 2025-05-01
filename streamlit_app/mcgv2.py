@@ -84,7 +84,7 @@ if uploaded_file is not None:
     # Process the image based on the selected material
     if selected_material:
         # Add a button to confirm HSV value adjustments
-        if st.sidebar.button("Proceed with HSV Values"):
+        if st.sidebar.button("Proceed Mineral Prediction"):
             # Convert to HSV and create a mask
             hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
             mask = cv2.inRange(hsv, (h_min, s_min, v_min), (h_max, s_max, v_max))
