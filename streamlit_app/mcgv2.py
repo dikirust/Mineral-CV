@@ -53,21 +53,22 @@ if uploaded_file is not None:
         "Sulfur": (10, 40, 10, 60, 60, 120)  # Dummy values for grayish range
     }
 
-    # Create buttons for material selection
+    # Update material selection options to include 'Specific Color'
     selected_material = st.sidebar.radio(
         "Select Material:",
-        options=["Nikel", "Besi", "Sulfur"],
+        options=["Nikel", "Besi", "Sulfur", "Specific Color"],
         index=0
     )
 
-    # Add sliders for HSV range adjustment
-    st.sidebar.header("Mask HSV Range Adjustment")
-    h_min = st.sidebar.slider("Hue Min", 0, 179, 20)
-    h_max = st.sidebar.slider("Hue Max", 0, 179, 50)
-    s_min = st.sidebar.slider("Saturation Min", 0, 255, 20)
-    s_max = st.sidebar.slider("Saturation Max", 0, 255, 255)
-    v_min = st.sidebar.slider("Value Min", 0, 255, 20)
-    v_max = st.sidebar.slider("Value Max", 0, 255, 255)
+    # Add sliders for HSV range adjustment, active only for 'Specific Color'
+    if selected_material == "Specific Color":
+        st.sidebar.header("Mask HSV Range Adjustment")
+        h_min = st.sidebar.slider("Hue Min", 0, 179, 20)
+        h_max = st.sidebar.slider("Hue Max", 0, 179, 50)
+        s_min = st.sidebar.slider("Saturation Min", 0, 255, 20)
+        s_max = st.sidebar.slider("Saturation Max", 0, 255, 255)
+        v_min = st.sidebar.slider("Value Min", 0, 255, 20)
+        v_max = st.sidebar.slider("Value Max", 0, 255, 255)
 
     # Process the image based on the selected material
     if selected_material:
