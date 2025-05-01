@@ -110,7 +110,7 @@ if uploaded_file is not None:
             # Calculate the segmented area percentage
             segmented_area_percentage = calculate_segmented_area_percentage(closed_mask_uint8)
             remaining_unsegmented_percentage = 100 - segmented_area_percentage
-            st.write(f"Segmented area: **{segmented_area_percentage:.2f}%**")
+            st.write(f"Segmented area for {selected_material}: **{segmented_area_percentage:.2f}%**")
             st.write("\n")  # Add spacing
 
             st.write(f"Unsegmented area: **{remaining_unsegmented_percentage:.2f}%**")
