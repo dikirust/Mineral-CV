@@ -60,10 +60,17 @@ if uploaded_file is not None:
         index=0
     )
 
+    # Add sliders for HSV range adjustment
+    st.sidebar.header("Mask HSV Range Adjustment")
+    h_min = st.sidebar.slider("Hue Min", 0, 179, 20)
+    h_max = st.sidebar.slider("Hue Max", 0, 179, 50)
+    s_min = st.sidebar.slider("Saturation Min", 0, 255, 20)
+    s_max = st.sidebar.slider("Saturation Max", 0, 255, 255)
+    v_min = st.sidebar.slider("Value Min", 0, 255, 20)
+    v_max = st.sidebar.slider("Value Max", 0, 255, 255)
+
     # Process the image based on the selected material
     if selected_material:
-        h_min, h_max, s_min, s_max, v_min, v_max = hsv_ranges[selected_material]
-
         # Add a button to confirm HSV value adjustments
         if st.sidebar.button("Proceed with HSV Values"):
             # Convert to HSV and create a mask
