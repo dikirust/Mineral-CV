@@ -43,7 +43,8 @@ if uploaded_file is not None:
     img = io.imread(uploaded_file)
 
     # Display the original image
-    st.image(img, caption="🖼️ Uploaded Geoscience Image", width=700)  # Adjust width as needed
+    st.image(img, caption="Uploaded Image", width=700)  # Adjust width as needed
+    st.write("\n")  # Add spacing
 
     # Convert RGBA to RGB if necessary
     if img.shape[-1] == 4:  # Check if the image has 4 channels
@@ -87,7 +88,8 @@ if uploaded_file is not None:
             # Convert to HSV and create a mask
             hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
             mask = cv2.inRange(hsv, (h_min, s_min, v_min), (h_max, s_max, v_max))
-            st.image(mask, caption=f"🎨 Raw Mask for {selected_material} Material (Before Binary Closing)", width=700, clamp=True)
+            st.image(mask, caption=f"Mask for {selected_material}", width=700, clamp=True)
+            st.write("\n")  # Add spacing
 
             # Use the raw mask directly
             closed_mask_uint8 = mask
@@ -102,16 +104,21 @@ if uploaded_file is not None:
             image_label_overlay = color.label2rgb(label_image, image=img)
 
             # Display the segmented image
-            st.image(image_label_overlay, caption=f"🔍 Segmented Image Highlighting {selected_material} Material", width=700)  # Adjust width as needed
+            st.image(image_label_overlay, caption=f"Segmented {selected_material}", width=700)  # Adjust width as needed
+            st.write("\n")  # Add spacing
 
             # Calculate the segmented area percentage
             segmented_area_percentage = calculate_segmented_area_percentage(closed_mask_uint8)
             remaining_unsegmented_percentage = 100 - segmented_area_percentage
-            st.write(f"📊 The segmented area percentage for {selected_material} material is **{segmented_area_percentage:.2f}%**, indicating the proportion of the image covered by the selected material.")
-            st.write(f"📉 The remaining unsegmented area percentage is **{remaining_unsegmented_percentage:.2f}%**, representing other materials or background.")
+            st.write(f"Segmented area: **{segmented_area_percentage:.2f}%**")
+            st.write("\n")  # Add spacing
+
+            st.write(f"Unsegmented area: **{remaining_unsegmented_percentage:.2f}%**")
+            st.write("\n")  # Add spacing
 
             # Display the remaining unmasked image
-            st.image(unmasked_image, caption=f"🚫 Remaining Unmasked Image Excluding {selected_material} Material", width=700)
+            st.image(unmasked_image, caption=f"Unmasked Image", width=700)
+            st.write("\n")  # Add spacing
 
     # Proceed with YOLOv11 object detection
     st.header("YOLOv11 Object Detection")
@@ -123,7 +130,8 @@ if uploaded_file is not None:
 
     for result in results:
         annotated_img = result.plot()  # Annotate image with bounding boxes
-        st.image(annotated_img, caption="📦 YOLOv11 Detection Results with Bounding Boxes", width=700)  # Adjust width as needed
+        st.image(annotated_img, caption="YOLOv11 Detection", width=700)  # Adjust width as needed
+        st.write("\n")  # Add spacing
 
     # Fixing the AttributeError by accessing model.names as a dictionary
     crack_class_id = [key for key, value in model.names.items() if value == 'crack']
@@ -139,4 +147,5 @@ if uploaded_file is not None:
         st.write("Detected boxes for crack class:", [box for box in results[0].boxes if box.cls == crack_class_id])
     else:
         crack_count = 0
-    st.write(f"🕳️ The YOLOv11 model detected **{crack_count} cracks** in the image, providing valuable insights for structural analysis.")
+    st.write(f"Detected cracks: **{crack_count}**")
+    st.write("\n")  # Add spacing
