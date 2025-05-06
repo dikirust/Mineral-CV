@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from skimage import io, measure, color
 from scipy import ndimage as ndi
 from ultralytics import YOLO
-# from inference_sdk import InferenceHTTPClient
+import os
 
 # Function to calculate the percentage area of the segmented region
 def calculate_segmented_area_percentage(mask):
@@ -23,8 +23,12 @@ def calculate_segmented_area_percentage(mask):
     percentage = (segmented_pixels / total_pixels) * 100  # Calculate percentage
     return percentage
 
+# Get the absolute path of the current script directory
+script_dir = os.path.dirname(__file__)
+model_path = os.path.join(script_dir, 'best.pt')
+
 # Load YOLOv11 model
-model = YOLO('best.pt')  # Replace 'yolo11n.pt' with your trained YOLOv11 model
+model = YOLO(model_path)  # Replace 'yolo11n.pt' with your trained YOLOv11 model
 
 # Streamlit app
 st.title("🛠️ Advanced Geoscience Image Analysis for Nickel Mining")
