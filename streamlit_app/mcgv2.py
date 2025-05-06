@@ -24,7 +24,7 @@ def calculate_segmented_area_percentage(mask):
     return percentage
 
 # Load YOLOv11 model
-model = YOLO('yolo11n.pt')  # Replace 'yolo11n.pt' with your trained YOLOv11 model
+model = YOLO('best.pt')  # Replace 'yolo11n.pt' with your trained YOLOv11 model
 
 # Streamlit app
 st.title("🛠️ Advanced Geoscience Image Analysis for Nickel Mining")
@@ -124,7 +124,7 @@ if uploaded_file is not None:
     st.header("YOLOv11 Object Detection")
 
     # Add a slider for confidence level
-    conf_level = st.slider("Confidence Level", min_value=0.0, max_value=1.0, value=0.10, step=0.01)
+    conf_level = st.slider("Confidence Level", min_value=0.0, max_value=1.0, value=0.02, step=0.01)
 
     results = model.predict(source=img, save=False, conf=conf_level)  # Use slider value for confidence threshold
 
@@ -134,18 +134,24 @@ if uploaded_file is not None:
         st.write("\n")  # Add spacing
 
     # Fixing the AttributeError by accessing model.names as a dictionary
-    crack_class_id = [key for key, value in model.names.items() if value == 'crack']
+    mechanical_crack_class_id = [key for key, value in model.names.items() if value == 'mechanical crack']
+    natural_crack_class_id = [key for key, value in model.names.items() if value == 'natural crack']
 
-    # Debug: Print crack class ID
-    # st.write("Crack class ID:", crack_class_id)
+    # Debug: Print class IDs for mechanical and natural cracks
+    # st.write("Mechanical crack class ID:", mechanical_crack_class_id)
+    # st.write("Natural crack class ID:", natural_crack_class_id)
 
-    if crack_class_id:
-        crack_class_id = crack_class_id[0]
-        crack_count = sum(1 for box in results[0].boxes if box.cls == crack_class_id)
+    mechanical_crack_count = 0
+    natural_crack_count = 0
 
-        # Debug: Print detected boxes for crack class
-        st.write("Detected boxes for crack class:", [box for box in results[0].boxes if box.cls == crack_class_id])
-    else:
-        crack_count = 0
-    st.write(f"Detected cracks: **{crack_count}**")
-    st.write("\n")  # Add spacing
+    if mechanical_crack_class_id:
+        mechanical_crack_class_id = mechanical_crack_class_id[0]
+        mechanical_crack_count = sum(1 for box in results[0].boxes if box.cls == mechanical_crack_class_id)
+
+    if natural_crack_class_id:
+        natural_crack_class_id = natural_crack_class_id[0]
+        natural_crack_count = sum(1 for box in results[0].boxes if box.cls == natural_crack_class_id)
+
+    # Display the counts
+    st.write(f"Detected mechanical cracks: **{mechanical_crack_count}**")
+    st.write(f"Detected natural cracks: **{natural_crack_count}**")
