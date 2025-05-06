@@ -27,6 +27,13 @@ def calculate_segmented_area_percentage(mask):
 script_dir = os.path.dirname(__file__)
 model_path = os.path.join(script_dir, 'best.pt')
 
+# Verify if the model file exists before loading
+if not os.path.exists(model_path):
+    raise FileNotFoundError(f"Model file not found at {model_path}. Please ensure the file exists.")
+
+# Debug: Print the resolved model path
+print(f"Resolved model path: {model_path}")
+
 # Load YOLOv11 model
 model = YOLO(model_path)  # Replace 'yolo11n.pt' with your trained YOLOv11 model
 
