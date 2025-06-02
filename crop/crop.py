@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import os  # Import os module
+import glob
 
 # Load image
 img = cv2.imread(r"C:\Users\diki.rustian\Documents\GitHub\Mineral-CV\corepic\N161927_10.00M-14.00M_BOX 5-6.JPG")
@@ -29,3 +30,22 @@ for idx, (x, y, w, h) in enumerate(row_coords):
     crop = img[y:y+h, x:x+w]
     out_path = os.path.join(output_dir, f"{base_name}_row_{idx+1}.jpg")
     cv2.imwrite(out_path, crop)
+
+# Linearize cropped rows into one image and rotate 90 degrees clockwise
+
+# Get all cropped row images in order
+row_images = []
+for i in range(1, 9):
+    row_path = os.path.join(output_dir, f"{base_name}_row_{i}.jpg")
+    row_img = cv2.imread(row_path)
+    if row_img is not None:
+        row_images.append(row_img)
+
+if row_images:
+    # Concatenate images horizontally (right edge to left edge)
+    linearized = cv2.hconcat(row_images)
+    # Rotate 90 degrees clockwise
+    linearized_rotated = cv2.rotate(linearized, cv2.ROTATE_90_CLOCKWISE)
+    # Save the result
+    linearized_path = os.path.join(output_dir, f"{base_name}_linearized.jpg")
+    cv2.imwrite(linearized_path, linearized_rotated)
